@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Here</string>
+    <string name="app_name">SmmartLastMileUser</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -18,4 +18,26 @@
     <string name="enter_mobile_number">Enter Mobile Number</string>
     <string name="enter_otp">Enter OTP</string>
     <string name="orders_list">Orders List</string>
+    <string name="profile">Profile</string>
+    <string name="notifications">Notifications</string>
+    <string name="posts">Posts</string>
+    <string name="return_list">Return List</string>
+    <string name="mobileno">Mobile :</string>
+    <string name="email">Email :</string>
+    <string name="username">Username :</string>
+    <string name="id">ID :</string>
+
+    <string name="submit">Submit</string>
+    <string name="address">Address :</string>
+    <string name="update">Update</string>
+    <string name="history">HISTORY</string>
+    <string name="get_location">Get Location</string>
+    <string name="app_id">LdYAfST5JuGgdYzTL7mk</string>
+    <string name="app_code">3SkmLh04d2Pv-kvsG5ZpDQ</string>
+    <string name="license_key">YeuM297fw4rEqO/EMUACCHr0tVT8ru/ZmyAg+fynh/nI2TkiZ6AnpQKZBuT81aQzUVfwTxmpFWeEz/TSa+0b3VyGQexgW/xwuKBoVIJjqYYZa6ly/bhYI7q+mavFoJFxL5zgT8vr+AtybkxDr85ShqOLoksPr2gudZXF/x+TXRsYQkKqpMBHtqB2OV/xq86FaLw66d+4TrLHCvwzQbj8jtDVgH04TphQXna76gJ/FBL9r2XXGiSPf78cCWXqJak01vhfT6nhLGPFv7VO0SudAX5MwJrdrhOsd8e8qBLKONFB2HRQDPshwZ4PdIFyyKq0csv9CR1F8XqfI9DNTkukDuQjCplfFOAwSZFx+HFGl2s0kAUHvMpaMJqHv4Vyu30rkzZUUYUeBELHzGlvmiMAXqe1samypbtUFkEsmZ8UkBr/5kl0OfXZOJJena1oDOzLXa/fLXE+ijtX/2UxKgwGJ72H2gTGt7MuP61fs5lXDhLccrJt0pjm4mWkbLTlNsVYbcRvTxzzJO2CnVuo5WKFta+VRt+v3MShHVOZMxTuMHhNsEKJxZAAgTIgADv+YLUV3/1IeP+oLhp8xA00kra5oYn7QRwVAQwGKFuqaslrIuXL9bKCRBk8+27T0gMHNgUc/KNLV3YrW8xomSf1eY5IoNGQMjOSjZpBv9g2tysXk0U=</string>
+    <string name="updating">Updating</string>
+    <string name="gettinglocation">Init Success..Get Location</string>
+    <string name="addItem">Order Item</string>
+    <string name="item_name">Item Name:</string>
+    <string name="quantity">Quantity:</string>
 </resources>

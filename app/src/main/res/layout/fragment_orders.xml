@@ -5,10 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".fragments.OrdersFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="10dp"
+        android:src="@android:drawable/ic_input_add"
+        android:id="@+id/addOrderBtn"
+        />
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/orders_recycler_view">
+
+    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

@@ -1,109 +1,118 @@
 package com.hackthon.here.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.hackthon.here.R;
+import com.hackthon.here.adapters.HomeViewPagerAdapter;
+import com.hackthon.here.fragments.NotificationsFragment;
+import com.hackthon.here.fragments.OrdersFragment;
+import com.hackthon.here.fragments.PostsFragment;
+import com.hackthon.here.fragments.ProfileFragment;
+import com.hackthon.here.fragments.ReturnListFragment;
+import com.here.android.mpa.common.ApplicationContext;
+import com.here.android.mpa.common.MapEngine;
+import com.here.android.mpa.common.OnEngineInitListener;
+import com.here.android.mpa.common.PositioningManager;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import java.io.File;
+
+public class HomeActivity extends AppCompatActivity {
+
+    private ViewPager mViewPager;
+    private MenuItem prevMenuItem;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                        mViewPager.setCurrentItem(0);
+                    return true;
+                case R.id.navigation_profile:
+                        mViewPager.setCurrentItem(1);
+                    return true;
+                case R.id.navigation_notifications:
+                        mViewPager.setCurrentItem(2);
+                    return true;
+                case R.id.navigation_posts:
+                        mViewPager.setCurrentItem(3);
+                    return true;
+                case R.id.navigation_return_list:
+                        mViewPager.setCurrentItem(4);
+                    return true;
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mViewPager = findViewById(R.id.home_viewpager);
+
+
+
+        final BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+            public void onPageScrolled(int i, float v, int i1) {
 
-                startActivity(new Intent(HomeActivity.this,Home2Activity.class));
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (prevMenuItem != null) {
+                    prevMenuItem.setChecked(false);
+                }
+                else
+                {
+                    navigation.getMenu().getItem(0).setChecked(false);
+                }
+                navigation.getMenu().getItem(i).setChecked(true);
+                prevMenuItem = navigation.getMenu().getItem(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setupViewPager(mViewPager);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+    private void setupViewPager(ViewPager viewPager) {
+        HomeViewPagerAdapter adapter = new HomeViewPagerAdapter(getSupportFragmentManager());
+
+        OrdersFragment ordersFragment = new OrdersFragment();
+        adapter.addFragment(ordersFragment);
+
+        ProfileFragment profileFragment = new ProfileFragment();
+        adapter.addFragment(profileFragment);
+
+        NotificationsFragment notificationsFragment = new NotificationsFragment();
+        adapter.addFragment(notificationsFragment);
+
+        PostsFragment postsFragment = new PostsFragment();
+        adapter.addFragment(postsFragment);
+
+        ReturnListFragment returnListFragment = new ReturnListFragment();
+        adapter.addFragment(returnListFragment);
+
+        viewPager.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.log_out) {
-            FirebaseAuth.getInstance().signOut();
-            finish();
-            startActivity(new Intent(this,LoginActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 }

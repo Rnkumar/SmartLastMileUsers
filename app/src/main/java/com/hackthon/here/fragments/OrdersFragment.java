@@ -1,54 +1,59 @@
 package com.hackthon.here.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.hackthon.here.R;
+import com.hackthon.here.Utils;
+import com.hackthon.here.models.HistoryModel;
+import com.hackthon.here.models.OrdersModel;
+import com.hackthon.here.models.SubOrdersModel;
+import com.hackthon.here.viewholders.HistoryViewHolder;
+import com.hackthon.here.viewholders.OrdersViewHolder;
+import com.hackthon.here.viewholders.SubOrdersViewHolder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.internal.Util;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OrdersFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link OrdersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class OrdersFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private FirebaseUser currentUser;
     public OrdersFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OrdersFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static OrdersFragment newInstance(String param1, String param2) {
         OrdersFragment fragment = new OrdersFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,55 +61,136 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        this.inflater = inflater;
+        this.container = container;
         return inflater.inflate(R.layout.fragment_orders, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        currentUser = auth.getCurrentUser();
+        RecyclerView recyclerView = view.findViewById(R.id.orders_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        FloatingActionButton addOrder = view.findViewById(R.id.addOrderBtn);
+        addOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItemDialog(inflater,container);
+            }
+        });
+
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Utils.getUserKey()).child(currentUser.getUid()).child(Utils.getOrdersKey());
+        FirebaseRecyclerOptions<SubOrdersModel> options =
+                new FirebaseRecyclerOptions.Builder<SubOrdersModel>()
+                        .setQuery(reference, SubOrdersModel.class)
+                        .build();
+
+        FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<SubOrdersModel, SubOrdersViewHolder>(options) {
+            @Override
+            public SubOrdersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_order, parent, false);
+
+                return new SubOrdersViewHolder(view);
+            }
+
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                Log.e("Changed","DataChanged");
+            }
+
+            @Override
+            public int getItemCount() {
+                Log.e("count",super.getItemCount()+"");
+                return super.getItemCount();
+            }
+
+            @Override
+            protected void onBindViewHolder(SubOrdersViewHolder holder, int position, SubOrdersModel model) {
+                holder.setData(model);
+            }
+        };
+
+        recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+    public void addItemDialog(LayoutInflater inflater,ViewGroup parent){
+        final boolean delivered=false, published=false;
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        View v = inflater.inflate(R.layout.popup_add_item,parent,false);
+        dialog.setView(v);
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        final TextInputEditText itemNameEditText = v.findViewById(R.id.item_name);
+        final TextInputEditText itemQuantityEditText = v.findViewById(R.id.item_quantity);
+        final TextInputEditText addressEditText = v.findViewById(R.id.address);
+        final TextInputEditText mobileEditText = v.findViewById(R.id.mobile);
+
+
+        dialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String itemName = itemNameEditText.getText().toString();
+                int quantity = Integer.parseInt(itemQuantityEditText.getText().toString());
+                String address = addressEditText.getText().toString();
+                String mobile = mobileEditText.getText().toString();
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("deliveries").child("ToBeDelivered").push();
+
+                SubOrdersModel subOrdersModel = new SubOrdersModel();
+                subOrdersModel.setAddress(address);
+                subOrdersModel.setDelivered(delivered);
+                subOrdersModel.setPublished(published);
+                subOrdersModel.setItemName(itemName);
+                subOrdersModel.setMobile(mobile);
+                subOrdersModel.setQuantity(quantity);
+                subOrdersModel.setUserId(currentUser.getUid());
+//                Map<String,Object> values = new HashMap<>();
+//                values.put("Address",address);
+//                values.put("delivered",delivered);
+//                values.put("published",published);
+//                values.put("ItemName",itemName);
+//                values.put("Quantity",quantity);
+//                values.put("mobile",mobile);
+
+                DatabaseReference userref = FirebaseDatabase.getInstance().getReference(Utils.getUserKey()).child(currentUser.getUid()).child(Utils.getOrdersKey());
+                userref.setValue(subOrdersModel);
+
+                //values.put("userId",currentUser.getUid());
+
+                reference.setValue(subOrdersModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(getActivity(), "added", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Log.e("Error",task.getException().getMessage());
+                        }
+                    }
+                });
+
+                dialog.dismiss();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Toast.makeText(getActivity(), "Cancelled Order", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.show();
     }
 }

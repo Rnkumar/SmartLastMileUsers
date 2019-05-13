@@ -1,7 +1,9 @@
 package com.hackthon.here.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -23,10 +25,15 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.hackthon.here.R;
+import com.hackthon.here.Utils;
 import com.mukesh.OnOtpCompletionListener;
 import com.mukesh.OtpView;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity{
@@ -115,6 +122,15 @@ public class LoginActivity extends AppCompatActivity{
                             otpDialog.dismiss();
                             Log.e(TAG, "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
+                            DatabaseReference userref = FirebaseDatabase.getInstance().getReference(Utils.getUserKey()).child(user.getUid()).child(Utils.getProfileKey());
+                            Map<String,String> values = new HashMap<>();
+                            values.put(Utils.getMobileKey(),loginPhoneNumberEditText.getText().toString());
+                            userref.setValue(values);
+//                            SharedPreferences preferences = getSharedPreferences(Utils.getSharedPreferenceName(), Context.MODE_PRIVATE);
+//                            SharedPreferences.Editor editor = preferences.edit();
+//                            editor.putBoolean("check",true);
+//                            editor.putString("mobile",loginPhoneNumberEditText.getText().toString());
+//                            editor.apply();
                             finish();
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         } else {

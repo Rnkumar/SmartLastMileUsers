@@ -7,22 +7,22 @@
         android:title="@string/orders_list" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="History" />
-    <item
-        android:id="@+id/navigation_notifications1"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="Notifications" />
-
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/profile" />
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="Posts" />
+        android:title="@string/notifications" />
+
     <item
-        android:id="@+id/navigation_notifications2"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="Return List" />
+        android:id="@+id/navigation_posts"
+        android:icon="@drawable/ic_poll_black_24dp"
+        android:title="@string/posts" />
+    <item
+        android:id="@+id/navigation_return_list"
+        android:icon="@drawable/ic_assignment_return_black_24dp"
+        android:title="@string/return_list" />
 
 
 
