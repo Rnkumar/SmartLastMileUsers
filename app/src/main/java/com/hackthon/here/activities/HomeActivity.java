@@ -42,11 +42,11 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_notifications:
                         mViewPager.setCurrentItem(2);
                     return true;
-                case R.id.navigation_posts:
-                        mViewPager.setCurrentItem(3);
-                    return true;
+//                case R.id.navigation_posts:
+//                        mViewPager.setCurrentItem(3);
+//                    return true;
                 case R.id.navigation_return_list:
-                        mViewPager.setCurrentItem(4);
+                        mViewPager.setCurrentItem(3);
                     return true;
             }
             return false;
@@ -106,8 +106,8 @@ public class HomeActivity extends AppCompatActivity {
         NotificationsFragment notificationsFragment = new NotificationsFragment();
         adapter.addFragment(notificationsFragment);
 
-        PostsFragment postsFragment = new PostsFragment();
-        adapter.addFragment(postsFragment);
+//        PostsFragment postsFragment = new PostsFragment();
+//        adapter.addFragment(postsFragment);
 
         ReturnListFragment returnListFragment = new ReturnListFragment();
         adapter.addFragment(returnListFragment);

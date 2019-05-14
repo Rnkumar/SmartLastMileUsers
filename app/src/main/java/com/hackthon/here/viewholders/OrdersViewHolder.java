@@ -10,7 +10,7 @@ import com.hackthon.here.models.OrdersModel;
 
 public class OrdersViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView orderId, cost, name, dateOfDelivery,deliveryLocation;
+    private TextView orderId, quantity, name, dateOfDelivery,deliveryLocation;
 
     public OrdersViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -19,7 +19,7 @@ public class OrdersViewHolder extends RecyclerView.ViewHolder {
 
     private void init(View view){
         orderId = view.findViewById(R.id.order_item_id);
-        cost = view.findViewById(R.id.order_item_cost);
+        quantity = view.findViewById(R.id.order_item_quantity);
         name = view.findViewById(R.id.order_item_name);
         dateOfDelivery = view.findViewById(R.id.order_delivery_date);
         deliveryLocation = view.findViewById(R.id.order_item_delivery_location);
@@ -27,7 +27,7 @@ public class OrdersViewHolder extends RecyclerView.ViewHolder {
 
     public void setData(OrdersModel ordersModel){
         orderId.setText(ordersModel.getOrderId());
-        cost.setText(ordersModel.getCost());
+        quantity.setText(ordersModel.getCost());
         name.setText(ordersModel.getItemname());
         dateOfDelivery.setText(ordersModel.getDateofDelivery());
         deliveryLocation.setText(ordersModel.getDeliveryLocation());

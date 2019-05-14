@@ -1,5 +1,9 @@
 package com.hackthon.here;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Utils {
 
     private static final String SHARED_PREFERENCE_NAME = "smartlastmileuser";
@@ -46,5 +50,11 @@ public class Utils {
 
     public static String getAddressKey() {
         return ADDRESS_KEY;
+    }
+
+    public static String formatDate(Date date){
+        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String stringdate = dt.format(date);
+        return stringdate;
     }
 }

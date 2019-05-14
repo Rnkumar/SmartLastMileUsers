@@ -7,7 +7,7 @@ import com.hackthon.here.sqlitedb.MyNotificationDataDb;
 
 public class MainApplication extends Application {
 
-    private MyNotificationDataDb notificationDataDb;
+    private static MyNotificationDataDb notificationDataDb;
 
     @Override
     public void onCreate() {

@@ -4,25 +4,23 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.time.LocalDateTime;
-
 @Entity
 public class NotificationData {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
     @ColumnInfo
-    public String driverName;
+    private String driverName;
 
     @ColumnInfo
-    public String message;
+    private String message;
 
     @ColumnInfo
-    public LocalDateTime localDateTime;
+    private String localDateTime;
 
     @ColumnInfo
-    public String mobile;
+    private String mobile;
 
     public int getId() {
         return id;
@@ -48,11 +46,11 @@ public class NotificationData {
         this.message = message;
     }
 
-    public LocalDateTime getLocalDateTime() {
+    public String getLocalDateTime() {
         return localDateTime;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
+    public void setLocalDateTime(String localDateTime) {
         this.localDateTime = localDateTime;
     }
 

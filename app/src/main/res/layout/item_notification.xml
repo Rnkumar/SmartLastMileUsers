@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    android:elevation="7dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="15sp"
+            android:drawableLeft="@drawable/ic_person_pin_orange_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_notification_driver_name"/>
+        <TextView
+            android:textSize="15sp"
+            android:drawableLeft="@drawable/ic_phone_orange_24dp"
+            android:layout_below="@id/item_notification_driver_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_notification_driver_mobile"/>
+        <TextView
+            android:textSize="15sp"
+            android:drawableLeft="@drawable/ic_message_orange_24dp"
+            android:layout_below="@id/item_notification_driver_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_notification_data"/>
+        <TextView
+            android:textSize="15sp"
+            android:textStyle="bold|italic"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_notification_date"/>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

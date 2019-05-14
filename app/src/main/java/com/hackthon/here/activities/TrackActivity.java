@@ -78,11 +78,6 @@ public class TrackActivity extends AppCompatActivity {
             case REQUEST_CODE_ASK_PERMISSIONS: {
                 for (int index = 0; index < permissions.length; index++) {
                     if (grantResults[index] != PackageManager.PERMISSION_GRANTED) {
-
-                        /*
-                         * If the user turned down the permission request in the past and chose the
-                         * Don't ask again option in the permission request system dialog.
-                         */
                         if (!ActivityCompat
                                 .shouldShowRequestPermissionRationale(this, permissions[index]))
                             Toast.makeText(this, "Required permission " + permissions[index]
@@ -121,42 +116,19 @@ public class TrackActivity extends AppCompatActivity {
                 + File.separator + ".isolated-here-maps";
         // Retrieve intent name from manifest
         String intentName = "com.here2k19.projects.smartlastmileuser.MapService";
-        try {
-            ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(this.getClass().toString(), "Failed to find intent name, NameNotFound: " + e.getMessage());
-        }
-
         boolean success = com.here.android.mpa.common.MapSettings.setIsolatedDiskCacheRootPath(diskCacheRoot, intentName);
         if (!success) {
-            // Setting the isolated disk cache was not successful, please check if the path is valid and
-            // ensure that it does not match the default location
-            // (getExternalStorageDirectory()/.here-maps).
-            // Also, ensure the provided intent name does not match the default intent name.
+
         } else {
             if (m_mapFragment != null) {
-                /* Initialize the SupportMapFragment, results will be given via the called back. */
                 m_mapFragment.init(new OnEngineInitListener() {
                     @Override
                     public void onEngineInitializationCompleted(OnEngineInitListener.Error error) {
-
                         if (error == Error.NONE) {
-                            /*
-                             * If no error returned from map fragment initialization, the map will be
-                             * rendered on screen at this moment.Further actions on map can be provided
-                             * by calling Map APIs.
-                             */
                             m_map = m_mapFragment.getMap();
-
-                            /*
-                             * Set the map center to the 4350 Still Creek Dr Burnaby BC (no animation).
-                             */
                             m_map.setCenter(new GeoCoordinate(49.259149, -123.008555, 0.0),
                                     Map.Animation.NONE);
-
-                            /* Set the zoom level to the average between min and max zoom level. */
                             m_map.setZoomLevel(14);
-
                         } else {
                             Log.e(this.getClass().toString(), "onEngineInitializationCompleted: " +
                                     "ERROR=" + error.getDetails(), error.getThrowable());
