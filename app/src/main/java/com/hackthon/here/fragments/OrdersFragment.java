@@ -9,7 +9,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +25,10 @@ import com.google.firebase.database.Query;
 import com.hackthon.here.R;
 import com.hackthon.here.Utils;
 import com.hackthon.here.models.SubOrdersModel;
+import com.hackthon.here.services.GeoCodingService;
 import com.hackthon.here.viewholders.SubOrdersViewHolder;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 
 public class OrdersFragment extends Fragment {
@@ -42,15 +40,7 @@ public class OrdersFragment extends Fragment {
     private TextView noOrderTextView;
 
     public OrdersFragment() {
-        // Required empty public constructor
-    }
 
-    public static OrdersFragment newInstance(String param1, String param2) {
-        OrdersFragment fragment = new OrdersFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -117,7 +107,7 @@ public class OrdersFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(SubOrdersViewHolder holder, int position, SubOrdersModel model) {
-                holder.setData(model);
+                holder.setData(model,getActivity());
             }
         };
 
@@ -159,35 +149,59 @@ public class OrdersFragment extends Fragment {
 //                values.put("Quantity",quantity);
 //                values.put("mobile",mobile);
 
-            DatabaseReference userref = FirebaseDatabase.getInstance().getReference(Utils.getUserKey()).child(currentUser.getUid()).child(Utils.getOrdersKey()).push();
-            String key = userref.getKey();
-            SubOrdersModel subOrdersModel = new SubOrdersModel();
-            subOrdersModel.setAddress(address);
-            subOrdersModel.setDelivered(delivered);
-            subOrdersModel.setPublished(published);
-            subOrdersModel.setItemName(itemName);
-            subOrdersModel.setMobile(mobile);
-            subOrdersModel.setQuantity(quantity);
-            subOrdersModel.setUserId(currentUser.getUid());
-            subOrdersModel.setOrderId(key);
-            subOrdersModel.setDate(new Date());
-            userref.setValue(subOrdersModel);
 
-            //values.put("userId",currentUser.getUid());
-
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("deliveries").child("ToBeDelivered").child(Utils.formatDate(new Date())).child(key);
-            reference.setValue(subOrdersModel);
+            GeoCodingService geoCodingService = new GeoCodingService(getActivity(), (latitude, longitude) -> {
+                DatabaseReference userref = FirebaseDatabase.getInstance().getReference(Utils.getUserKey()).child(currentUser.getUid()).child(Utils.getOrdersKey()).push();
+                String key = userref.getKey();
+                SubOrdersModel subOrdersModel = new SubOrdersModel();
+                subOrdersModel.setAddress(address);
+                subOrdersModel.setDelivered(delivered);
+                subOrdersModel.setPublished(published);
+                subOrdersModel.setItemName(itemName);
+                subOrdersModel.setMobile(mobile);
+                subOrdersModel.setQuantity(quantity);
+                subOrdersModel.setUserId(currentUser.getUid());
+                subOrdersModel.setOrderId(key);
+                subOrdersModel.setDate(new Date());
 
 
-
-            reference.setValue(subOrdersModel).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
-                    Toast.makeText(getActivity(), "added", Toast.LENGTH_SHORT).show();
-                }else{
-                    Log.e("Error",task.getException().getMessage());
-                }
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("deliveries").child("ToBeDelivered").child(/*Utils.formatDate(new Date())*/"15-05-2019").child(key);
+                subOrdersModel.setLocation(latitude+","+longitude);
+                userref.setValue(subOrdersModel);
+                reference.setValue(subOrdersModel);
+                Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
             });
 
+            geoCodingService.geoCodeAddress(address,getActivity().getString(R.string.app_id),getActivity().getString(R.string.app_code));
+
+            String[] nameArr = {"Radio", "WalkieTalkie", "PlayDoll", "Bike"};
+            String[] mobileArr = {"9494949494", "9898989898", "9797979797", "9969696969"};
+            String[] addressArr = {"No.2, native street", "No.125, Ambedkar street", "No.10, dravid street", "No.4, Dhoni street"};
+            String[] locations = {"13.047917,77.620978", "13.054939, 77.632518", "13.064722, 77.634321", "13.042231, 77.625050"};
+
+            for(int i=0;i<4;i++){
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("deliveries").child("ToBeDelivered").child("15-05-2019").child(i+"");
+                SubOrdersModel model = new SubOrdersModel();
+                model.setAddress(addressArr[i]);
+                model.setDelivered(delivered);
+                model.setPublished(published);
+                model.setLocation(locations[i]);
+                model.setItemName(nameArr[i]);
+                model.setMobile(mobileArr[i]);
+                model.setQuantity(quantity);
+                model.setUserId(currentUser.getUid());
+                model.setOrderId(i+"");
+                model.setDate(new Date());
+                ref.setValue(model);
+            }
+
+//            reference.setValue(subOrdersModel).addOnCompleteListener(task -> {
+//                if (task.isSuccessful()){
+//                    Toast.makeText(getActivity(), "added", Toast.LENGTH_SHORT).show();
+//                }else{
+//                    Log.e("Error",task.getException().getMessage());
+//                }
+//            });
             dialog12.dismiss();
         }).setNegativeButton("Cancel", (dialog1, which) -> {
             dialog1.dismiss();
@@ -207,6 +221,8 @@ public class OrdersFragment extends Fragment {
             }
         }
     }
+
+
 
 
 }

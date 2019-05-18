@@ -19,10 +19,10 @@ public class OrdersViewHolder extends RecyclerView.ViewHolder {
 
     private void init(View view){
         orderId = view.findViewById(R.id.order_item_id);
-        quantity = view.findViewById(R.id.order_item_quantity);
-        name = view.findViewById(R.id.order_item_name);
-        dateOfDelivery = view.findViewById(R.id.order_delivery_date);
-        deliveryLocation = view.findViewById(R.id.order_item_delivery_location);
+        quantity = view.findViewById(R.id.return_item_quantity);
+        name = view.findViewById(R.id.return_item_name);
+        dateOfDelivery = view.findViewById(R.id.return_delivery_date);
+        deliveryLocation = view.findViewById(R.id.return_item_delivery_location);
     }
 
     public void setData(OrdersModel ordersModel){

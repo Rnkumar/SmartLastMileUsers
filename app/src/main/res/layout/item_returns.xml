@@ -17,10 +17,10 @@
             android:textSize="15sp"
             android:text="@string/order_id"
             android:textStyle="bold"
-            android:id="@+id/order_item_id"/>
+            android:id="@+id/return_item_id"/>
 
         <TextView
-            android:layout_below="@id/order_item_id"
+            android:layout_below="@id/return_item_id"
             android:textSize="15sp"
             android:text="@string/name"
             android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
 
         <TextView
             android:layout_alignParentEnd="true"
-            android:text="Date:"
+            android:text="@string/return_date"
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_below="@id/return_delivery_date"
             android:layout_alignParentEnd="true"
             android:textSize="15sp"
-            android:text="Quantity"
+            android:text="@string/quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/return_item_quantity"/>
@@ -51,25 +51,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/return_item_delivery_location"/>
-
-        <Button
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/button_return"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/track"
-            android:id="@+id/button_track"
+        <TextView
+            android:textSize="15sp"
+            android:text="@string/reason"
             android:layout_below="@id/return_item_delivery_location"
-            />
-
-        <Button
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/returnText"
-            android:id="@+id/button_return"
-            android:layout_below="@id/return_item_delivery_location"
-            />
+            android:id="@+id/return_reason"/>
+
 
     </RelativeLayout>
 

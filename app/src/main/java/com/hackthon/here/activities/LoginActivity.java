@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().setTitle(getString(R.string.login));
         loginPhoneNumberEditText= findViewById(R.id.login_mobile_number);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");

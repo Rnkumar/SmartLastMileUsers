@@ -2,46 +2,14 @@ package com.hackthon.here.models;
 
 import java.util.Date;
 
-public class SubOrdersModel {
+public class ReturnsModel {
 
-    private String mobile, Address, ItemName, Location, userId, orderId, driverName, driverMobile;
-    private Date date;
-    private boolean published, delivered;
+    private String mobile, Address, ItemName, Location, userId, orderId, reason;
+    private Date date, returnDate;
+    private boolean published, delivered, returned;
     private int quantity;
 
-
-    public String getDriverName() {
-        return driverName;
-    }
-
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
-    }
-
-    public String getDriverMobile() {
-        return driverMobile;
-    }
-
-    public void setDriverMobile(String driverMobile) {
-        this.driverMobile = driverMobile;
-    }
-
-    public SubOrdersModel(String mobile, String address, String itemName, String location, String userId, String orderId, String driverName, String driverMobile, Date date, boolean published, boolean delivered, int quantity) {
-        this.mobile = mobile;
-        Address = address;
-        ItemName = itemName;
-        Location = location;
-        this.userId = userId;
-        this.orderId = orderId;
-        this.driverName = driverName;
-        this.driverMobile = driverMobile;
-        this.date = date;
-        this.published = published;
-        this.delivered = delivered;
-        this.quantity = quantity;
-    }
-
-    public SubOrdersModel() {
+    public ReturnsModel() {
     }
 
     public String getOrderId() {
@@ -52,8 +20,17 @@ public class SubOrdersModel {
         this.orderId = orderId;
     }
 
-    public SubOrdersModel(String mobile, String address, String itemName, String location, String userId, boolean published, boolean delivered, int quantity, String orderId, Date date) {
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public ReturnsModel(Date returnDate, String reason, boolean returned, String mobile, String address, String itemName, String location, String userId, boolean published, boolean delivered, int quantity, String orderId, Date date) {
         this.mobile = mobile;
+        this.returnDate = returnDate;
         this.Address = address;
         this.ItemName = itemName;
         this.Location = location;
@@ -63,6 +40,24 @@ public class SubOrdersModel {
         this.quantity = quantity;
         this.orderId = orderId;
         this.date = date;
+        this.reason = reason;
+        this.returned = returned;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public boolean isReturned() {
+        return returned;
+    }
+
+    public void setReturned(boolean returned) {
+        this.returned = returned;
     }
 
     public Date getDate() {
@@ -137,3 +132,4 @@ public class SubOrdersModel {
         this.quantity = quantity;
     }
 }
+

@@ -15,6 +15,22 @@ public class Utils {
     private static final String ADDRESS_KEY = "address";
     private static final String LOCATION_KEY = "location";
     private static final String ORDERS_KEY = "orders";
+    private static final String RETURNS_KEY = "returns";
+    private static final String DRIVER_KEY = "drivers";
+    private static final String DRIVER_LOCATION_KEY = "livelocation";
+
+
+    public static String getDriverKey() {
+        return DRIVER_KEY;
+    }
+
+    public static String getDriverLocationKey() {
+        return DRIVER_LOCATION_KEY;
+    }
+
+    public static String getReturnsKey() {
+        return RETURNS_KEY;
+    }
 
     public static String getOrdersKey() {
         return ORDERS_KEY;

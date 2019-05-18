@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -30,8 +31,7 @@
 
         <activity android:name=".activities.TrackActivity" />
         <activity
-            android:name=".activities.HomeActivity"
-            android:label="@string/title_activity_home2">
+            android:name=".activities.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,7 +48,7 @@
             android:exported="false"
             android:label="BasicMapSolutionMapService">
             <intent-filter>
-                <action android:name="com.here2k19.projects.smartlastmileuser.MapService"></action>
+                <action android:name="com.here2k19.projects.smartlastmileuser.MapService" />
             </intent-filter>
         </service>
 
@@ -64,7 +64,11 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-
+        <service
+            android:enabled="true"
+            android:exported="false"
+            android:name="com.here.services.internal.LocationService"
+            android:process=":remote"/>
     </application>
 
 </manifest>

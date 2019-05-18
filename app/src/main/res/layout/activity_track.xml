@@ -10,4 +10,52 @@
         class="com.here.android.mpa.mapping.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/call_driver_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_name"
+                android:text="Item A"
+                android:drawablePadding="5dp"
+                android:textSize="15sp"
+                android:drawableLeft="@drawable/ic_message_orange_24dp"/>
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/call_driver_btn"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/drivername"
+            android:text="Rajan"
+            android:textSize="15sp"
+            android:drawableLeft="@drawable/ic_person_pin_orange_24dp"/>
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            app:fabSize="mini"
+            android:id="@+id/call_driver_btn"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_phone_white_24dp"
+            />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
 </RelativeLayout>
