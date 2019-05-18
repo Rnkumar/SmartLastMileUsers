@@ -189,7 +189,7 @@ public class OrdersFragment extends Fragment {
                 model.setItemName(nameArr[i]);
                 model.setMobile(mobileArr[i]);
                 model.setQuantity(quantity);
-                model.setUserId(currentUser.getUid());
+                model.setUserId("ccd");
                 model.setOrderId(i+"");
                 model.setDate(new Date());
                 ref.setValue(model);

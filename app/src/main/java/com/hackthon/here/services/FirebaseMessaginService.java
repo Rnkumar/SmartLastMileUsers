@@ -1,6 +1,5 @@
 package com.hackthon.here.services;
 
-import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,12 +14,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.hackthon.here.MainApplication;
 import com.hackthon.here.R;
 import com.hackthon.here.activities.HomeActivity;
-import com.hackthon.here.sqlitedb.NotificationDAO;
 import com.hackthon.here.sqlitedb.NotificationData;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 public class FirebaseMessaginService extends FirebaseMessagingService {
     @Override
