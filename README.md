@@ -22,3 +22,5 @@
     13. Once you enable the track button by assigning it to a driver in admin panel, you can see the maps screen where the marker denotes the driver location.And there is a card below where you can call the user and give feedback.
     14. As an alternate to assigning it to a driver, use can use the three dots on the top right and select track to get into the track screen.
     15. Finally you can log_out using the same three dots on the top right, and select log-out.
+
+### The apk is present in this directory - https://drive.google.com/open?id=1hqxN6rOJgekKoQIcPgdu9DxtWMVbhzam
