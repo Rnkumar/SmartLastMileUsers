@@ -32,14 +32,14 @@
         <activity android:name=".activities.TrackActivity" />
         <activity
             android:name=".activities.HomeActivity">
+
+        </activity>
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".activities.LoginActivity">
-
         </activity>
         <activity android:name=".activities.MainActivity" />
 
@@ -53,13 +53,15 @@
         </service>
 
         <service
-            android:name="com.hackthon.here.services.FirebaseMessaginService">
+            android:name="com.hackthon.here.services.FirebaseMessaginService"
+            android:permission="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name="com.hackthon.here.services.FirebaseInstanceIDService">
+            android:name="com.hackthon.here.services.FirebaseInstanceIDService"
+            android:permission="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

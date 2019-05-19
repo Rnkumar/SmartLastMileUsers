@@ -3,7 +3,9 @@ package com.hackthon.here.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,14 +15,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +44,7 @@ import com.here.android.mpa.mapping.SupportMapFragment;
 import com.here.odnp.util.Log;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -72,6 +81,11 @@ public class TrackActivity extends AppCompatActivity {
 
         TextView itemNameTextView = findViewById(R.id.item_name);
         TextView driverNameTextView = findViewById(R.id.drivername);
+
+        TextView writeFeedback  = findViewById(R.id.feedback_driver_btn);
+        writeFeedback.setOnClickListener(v -> {
+                feedbackDialog();
+        });
 
         itemNameTextView.setText(itemName);
         driverNameTextView.setText(driverName);
@@ -113,7 +127,7 @@ public class TrackActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home,menu);
+        //getMenuInflater().inflate(R.menu.home,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -232,5 +246,39 @@ public class TrackActivity extends AppCompatActivity {
 //                break;
 //        }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void feedbackDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Feedback");
+        LinearLayout layout  = new LinearLayout(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(layoutParams);
+        layout.setGravity(Gravity.CENTER);
+        EditText feedbackEditText = new EditText(this);
+        feedbackEditText.setEms(10);
+        layout.addView(feedbackEditText);
+        builder.setView(layout);
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Submit", (dialog, which) -> {
+            dialog.dismiss();
+            String comment = feedbackEditText.getText().toString();
+            SharedPreferences sp = getSharedPreferences(Utils.getSharedPreferenceName(),Context.MODE_PRIVATE);
+            String name = sp.getString(Utils.getNameKey(),"");
+            //String mobile = sp.getString(Utils.getMobileKey(),"");
+            java.util.Map<String,String> map = new HashMap<>();
+            map.put("Name",name);
+            map.put("comment",comment);
+            map.put("date",Utils.formatDate(new Date()));
+            map.put("drivername",driverName);
+            map.put("location","Chennai");
+
+            FirebaseDatabase.getInstance().getReference("feedbacks").push().setValue(map);
+        }).setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        builder.show();
     }
 }

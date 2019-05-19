@@ -51,9 +51,20 @@
             android:layout_margin="5dp"
             app:fabSize="mini"
             android:id="@+id/call_driver_btn"
-            android:layout_centerVertical="true"
             android:src="@drawable/ic_phone_white_24dp"
             />
+            <TextView
+                android:padding="3dp"
+                android:textColor="@android:color/white"
+                android:background="@color/colorAccent"
+                android:layout_centerHorizontal="true"
+               android:layout_below="@id/call_driver_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Write Feedback"
+                android:id="@+id/feedback_driver_btn"
+                />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = "Login Activity";
-    private TextInputEditText loginPhoneNumberEditText;
+    private TextInputEditText loginPhoneNumberEditText,nameEditText;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private TextView resultText;
@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
         getSupportActionBar().setTitle(getString(R.string.login));
         loginPhoneNumberEditText= findViewById(R.id.login_mobile_number);
+        nameEditText = findViewById(R.id.login_name);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
@@ -127,11 +128,11 @@ public class LoginActivity extends AppCompatActivity{
                             Map<String,String> values = new HashMap<>();
                             values.put(Utils.getMobileKey(),loginPhoneNumberEditText.getText().toString());
                             userref.setValue(values);
-//                            SharedPreferences preferences = getSharedPreferences(Utils.getSharedPreferenceName(), Context.MODE_PRIVATE);
-//                            SharedPreferences.Editor editor = preferences.edit();
-//                            editor.putBoolean("check",true);
-//                            editor.putString("mobile",loginPhoneNumberEditText.getText().toString());
-//                            editor.apply();
+                            SharedPreferences preferences = getSharedPreferences(Utils.getSharedPreferenceName(), Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(Utils.getNameKey(),nameEditText.getText().toString());
+                            editor.putString(Utils.getMobileKey(),loginPhoneNumberEditText.getText().toString());
+                            editor.apply();
                             finish();
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         } else {
@@ -154,12 +155,10 @@ public class LoginActivity extends AppCompatActivity{
         resultText = view.findViewById(R.id.result_text);
 
         OtpView otpView = view.findViewById(R.id.otp_view);
-        otpView.setOtpCompletionListener(new OnOtpCompletionListener() {
-            @Override public void onOtpCompleted(String otp) {
-                Toast.makeText(LoginActivity.this, "OTP:"+otp, Toast.LENGTH_SHORT).show();
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, otp);
-                signInWithPhoneAuthCredential(credential);
-            }
+        otpView.setOtpCompletionListener(otp -> {
+            Toast.makeText(LoginActivity.this, "OTP:"+otp, Toast.LENGTH_SHORT).show();
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, otp);
+            signInWithPhoneAuthCredential(credential);
         });
 
         builder.setView(view);

@@ -13,8 +13,11 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hackthon.here.MainApplication;
 import com.hackthon.here.R;
+import com.hackthon.here.Utils;
 import com.hackthon.here.activities.HomeActivity;
 import com.hackthon.here.sqlitedb.NotificationData;
+
+import java.util.Date;
 
 public class FirebaseMessaginService extends FirebaseMessagingService {
     @Override
@@ -31,10 +34,12 @@ public class FirebaseMessaginService extends FirebaseMessagingService {
         NotificationData notificationData = new NotificationData();
         notificationData.setDriverName(notificationTitle);
         notificationData.setMessage(notificationBody);
+        notificationData.setLocalDateTime(Utils.formatDate(new Date()));
+        notificationData.setMobile("9393393939");
         //notificationData.setLocalDateTime();
 
         MainApplication application = (MainApplication) getApplicationContext();
-        application.getNotificationDataDb().notificationDAO().insertAll();
+        application.getNotificationDataDb().notificationDAO().insertAll(notificationData);
 
         sendNotification(notificationTitle, notificationBody);
     }

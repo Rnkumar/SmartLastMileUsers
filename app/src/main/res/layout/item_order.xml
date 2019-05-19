@@ -36,10 +36,12 @@
             android:id="@+id/return_delivery_date"/>
 
         <TextView
-            android:layout_below="@id/return_delivery_date"
-            android:layout_alignParentEnd="true"
+            android:layout_below="@id/return_item_delivery_location"
+            android:layout_toLeftOf="@id/button_track"
             android:textSize="15sp"
-            android:text="Quantity"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:text="Quantity: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/return_item_quantity"/>

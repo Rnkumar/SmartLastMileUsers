@@ -3,6 +3,7 @@ package com.hackthon.here;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.hackthon.here.sqlitedb.MyNotificationDataDb;
 
 public class MainApplication extends Application {
@@ -12,7 +13,11 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        notificationDataDb = Room.databaseBuilder(getApplicationContext(), MyNotificationDataDb.class, "Database").build();
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        notificationDataDb = Room.databaseBuilder(getApplicationContext(), MyNotificationDataDb.class, "Database").allowMainThreadQueries().build();
+
     }
 
     public MyNotificationDataDb getNotificationDataDb() {
