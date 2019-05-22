@@ -9,9 +9,15 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +31,16 @@ import com.google.firebase.database.Query;
 import com.hackthon.here.R;
 import com.hackthon.here.Utils;
 import com.hackthon.here.models.SubOrdersModel;
+import com.hackthon.here.services.AutoCompleteService;
 import com.hackthon.here.services.GeoCodingService;
 import com.hackthon.here.viewholders.SubOrdersViewHolder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class OrdersFragment extends Fragment {
@@ -132,6 +144,58 @@ public class OrdersFragment extends Fragment {
         final TextInputEditText itemQuantityEditText = v.findViewById(R.id.item_quantity);
         final TextInputEditText addressEditText = v.findViewById(R.id.address);
         final TextInputEditText mobileEditText = v.findViewById(R.id.mobile);
+        Spinner spinner = v.findViewById(R.id.spinner);
+        List<String> list = new ArrayList<>();
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(v.getContext(), R.layout.support_simple_spinner_dropdown_item, list);
+        spinner.setAdapter(arrayAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("data",spinner.getSelectedItem()+"");
+                String selectedItem = String.valueOf(spinner.getSelectedItem());
+                addressEditText.setText(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        AutoCompleteService autoCompleteService = new AutoCompleteService(v.getContext(), jsonArray -> {
+            list.clear();
+            Log.e("Data",jsonArray.toString());
+            for(int i=0;i<jsonArray.length();i++){
+                try {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    list.add(jsonObject.getString("label"));
+                    arrayAdapter.notifyDataSetChanged();
+                    spinner.performClick();
+                } catch (JSONException e) {
+                    Log.e("Error:",e.getMessage());
+                }
+            }
+        });
+
+        addressEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("input",s.charAt(s.length()-1)+"");
+                if(s.charAt(s.length()-1) == ' ' && count > 0){
+                    autoCompleteService.getAutoComplete(s.toString(),getString(R.string.app_id),getString(R.string.app_code));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         dialog.setPositiveButton("Add", (dialog12, which) -> {
