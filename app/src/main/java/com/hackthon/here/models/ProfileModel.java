@@ -3,11 +3,29 @@ package com.hackthon.here.models;
 public class ProfileModel {
 
     private String name, address, email, mobile, location;
+    private  int bonuspoints;
 
     public ProfileModel() {
     }
 
-    public ProfileModel(String name, String address, String email, String mobile,String location) {
+    public int getBonuspoints() {
+        return bonuspoints;
+    }
+
+    public void setBonuspoints(int bonuspoints) {
+        this.bonuspoints = bonuspoints;
+    }
+
+    public ProfileModel(String name, String address, String email, String mobile, String location, int bonuspoints) {
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.mobile = mobile;
+        this.location = location;
+        this.bonuspoints = bonuspoints;
+    }
+
+    public ProfileModel(String name, String address, String email, String mobile, String location) {
         this.name = name;
         this.address = address;
         this.email = email;

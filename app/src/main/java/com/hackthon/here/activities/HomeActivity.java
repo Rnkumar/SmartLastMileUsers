@@ -6,13 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hackthon.here.R;
 import com.hackthon.here.Utils;
 import com.hackthon.here.adapters.HomeViewPagerAdapter;
@@ -26,6 +30,9 @@ import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.MapEngine;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.common.PositioningManager;
+import com.here.android.mpa.mapping.MapRoute;
+import com.here.android.mpa.routing.Route;
+import com.here.odnp.util.Log;
 
 import java.io.File;
 import java.util.Objects;
@@ -117,9 +124,6 @@ public class HomeActivity extends AppCompatActivity {
 
         NotificationsFragment notificationsFragment = new NotificationsFragment();
         adapter.addFragment(notificationsFragment);
-
-//        PostsFragment postsFragment = new PostsFragment();
-//        adapter.addFragment(postsFragment);
 
         ReturnListFragment returnListFragment = new ReturnListFragment();
         adapter.addFragment(returnListFragment);

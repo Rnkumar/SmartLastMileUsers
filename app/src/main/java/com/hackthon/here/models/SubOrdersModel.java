@@ -4,7 +4,40 @@ import java.util.Date;
 
 public class SubOrdersModel {
 
-    private String mobile, Address, ItemName, Location, userId, orderId, driverName, driverMobile;
+    private String mobile;
+    private String Address;
+    private String ItemName;
+    private String Location;
+    private String userId;
+    private String orderId;
+    private String driverName;
+    private String driverMobile;
+
+    public String getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(String driverId) {
+        this.driverId = driverId;
+    }
+
+    public SubOrdersModel(String mobile, String address, String itemName, String location, String userId, String orderId, String driverName, String driverMobile, String driverId, Date date, boolean published, boolean delivered, int quantity) {
+        this.mobile = mobile;
+        Address = address;
+        ItemName = itemName;
+        Location = location;
+        this.userId = userId;
+        this.orderId = orderId;
+        this.driverName = driverName;
+        this.driverMobile = driverMobile;
+        this.driverId = driverId;
+        this.date = date;
+        this.published = published;
+        this.delivered = delivered;
+        this.quantity = quantity;
+    }
+
+    private String driverId;
     private Date date;
     private boolean published, delivered;
     private int quantity;

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +42,9 @@ import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapMarker;
+import com.here.android.mpa.mapping.MapRoute;
 import com.here.android.mpa.mapping.SupportMapFragment;
+import com.here.android.mpa.routing.Route;
 import com.here.odnp.util.Log;
 
 import java.io.File;
@@ -208,25 +212,28 @@ public class TrackActivity extends AppCompatActivity {
                             MapMarker marker = new MapMarker();
                             marker.setCoordinate(new GeoCoordinate(49.259149, -123.008555, 0.0));
                             m_map.addMapObject(marker);
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Utils.getDriverKey()).child("fjsdklhfkjs").child(Utils.getDriverLocationKey());
+
+                            m_map.setCenter(new GeoCoordinate(49.259149, -123.008555, 0.0),
+                                    Map.Animation.NONE);
+                            m_map.setZoomLevel(10);
+
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Utils.getDriverKey()).child(driverId).child(Utils.getDriverLocationKey());
                             databaseReference.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        HashMap<String,Double> location = (HashMap<String,Double>)dataSnapshot.getValue();
-                                        GeoCoordinate geoCoordinate = new GeoCoordinate(location.get("latitude"),location.get("longitude"));
-                                        marker.setCoordinate(geoCoordinate);
-                                        m_map.setCenter(geoCoordinate,
+                                    HashMap<String,Double> location = (HashMap<String,Double>)dataSnapshot.getValue();
+                                    GeoCoordinate geoCoordinate = new GeoCoordinate(location.get("latitude"),location.get("longitude"));
+                                    marker.setCoordinate(geoCoordinate);
+                                    m_map.setCenter(geoCoordinate,
                                             Map.Animation.NONE);
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                    Log.e("Error",databaseError.getMessage());
                                 }
                             });
-                            m_map.setCenter(new GeoCoordinate(49.259149, -123.008555, 0.0),
-                                    Map.Animation.NONE);
-                            m_map.setZoomLevel(10);
+                            loadSerializedData(driverId);
                         } else {
                             Log.e(this.getClass().toString(), "onEngineInitializationCompleted: " +
                                     "ERROR=" + error.getDetails(), error.getThrowable());
@@ -281,4 +288,54 @@ public class TrackActivity extends AppCompatActivity {
 
         builder.show();
     }
+
+
+    public void loadSerializedData(String driverId){
+        FirebaseDatabase.getInstance().getReference().child(Utils.getDriverKey()).child(driverId).child(Utils.getDriverRouteKey()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Log.e("Data","DAta");
+
+                String values;
+                if(dataSnapshot.getValue() != null) {
+                    String value = String.valueOf(dataSnapshot.getValue());
+                    values = value;
+                }else{
+                    Log.e("Value","Failed");
+                    return;
+                }
+                Log.e("Value: ",values);
+                try {
+                    byte[] data = Base64.decode(values, Base64.DEFAULT);
+                    Route.DeserializationCallback dCallback = deserializationResult -> {
+                        Route route = deserializationResult.route;
+                        runOnUiThread(() -> {
+                            MapRoute mapRoute = new MapRoute(route);
+                            m_map.addMapObject(mapRoute);
+                        });
+
+                    };
+                    Route.deserializeAsync(data,dCallback);
+                }catch(Exception e){
+                    Log.e("Error",e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("error",databaseError.getMessage());
+            }
+        });
+    }
+
+//    class AsyncTasks extends AsyncTask<String,Void,Void>{
+//
+//        @Override
+//        protected Void doInBackground(String... strings) {
+//            loadSerializedData(strings[0]);
+//            return null;
+//        }
+//    }
+
 }

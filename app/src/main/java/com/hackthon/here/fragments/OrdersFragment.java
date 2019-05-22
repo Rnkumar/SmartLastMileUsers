@@ -25,9 +25,12 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hackthon.here.R;
 import com.hackthon.here.Utils;
 import com.hackthon.here.models.SubOrdersModel;
@@ -233,6 +236,19 @@ public class OrdersFragment extends Fragment {
                 subOrdersModel.setLocation(latitude+","+longitude);
                 userref.setValue(subOrdersModel);
                 reference.setValue(subOrdersModel);
+                DatabaseReference bonuspoints = FirebaseDatabase.getInstance().getReference(Utils.getUserKey()).child(currentUser.getUid()).child(Utils.getProfileKey()).child(Utils.getBonusPointsKey());
+                bonuspoints.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int a = (int)dataSnapshot.getValue();
+                        bonuspoints.setValue(a+10);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
             });
 
@@ -241,7 +257,7 @@ public class OrdersFragment extends Fragment {
             String[] nameArr = {"Radio", "WalkieTalkie", "PlayDoll", "Bike"};
             String[] mobileArr = {"9494949494", "9898989898", "9797979797", "9969696969"};
             String[] addressArr = {"No.2, native street", "No.125, Ambedkar street", "No.10, dravid street", "No.4, Dhoni street"};
-            String[] locations = {"13.047917,77.620978", "13.054939, 77.632518", "13.064722, 77.634321", "13.042231, 77.625050"};
+            String[] locations = {"13.047917,77.620978", "13.054939,77.632518", "13.064722,77.634321", "13.042231,77.62505"};
 
             for(int i=0;i<4;i++){
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("deliveries").child("ToBeDelivered").child("15-05-2019").child(i+"");

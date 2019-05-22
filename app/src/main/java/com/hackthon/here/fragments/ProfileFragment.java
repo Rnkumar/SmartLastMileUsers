@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment implements PositioningManager.OnPo
 
     private String mobile, address, email, userName;
 
-    private TextView latLng;
+    private TextView latLng, bonusPoints;
 
     private SharedPreferences sharedPreferences;
 
@@ -89,6 +89,7 @@ public class ProfileFragment extends Fragment implements PositioningManager.OnPo
         emailEditText = view.findViewById(R.id.email);
         mobileEditText = view.findViewById(R.id.mobile);
         addressEditText = view.findViewById(R.id.address);
+        bonusPoints = view.findViewById(R.id.bonuspoints);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
 
@@ -96,13 +97,17 @@ public class ProfileFragment extends Fragment implements PositioningManager.OnPo
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        ProfileModel profileModel = dataSnapshot.getValue(ProfileModel.class);
-//                        Log.e("Profile",profileModel.toString());
+                        ProfileModel profileModel = dataSnapshot.getValue(ProfileModel.class);
+                        usernameEditText.setText(profileModel.getName());
+                        emailEditText.setText(profileModel.getEmail());
+                        mobileEditText.setText(profileModel.getMobile());
+                        addressEditText.setText(profileModel.getAddress());
+                        bonusPoints.setText(String.format("%d points", profileModel.getBonuspoints()));
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Log.e("eror",databaseError.getMessage());
                     }
                 });
 

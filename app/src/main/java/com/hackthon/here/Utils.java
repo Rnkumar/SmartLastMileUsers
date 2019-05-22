@@ -1,5 +1,13 @@
 package com.hackthon.here;
 
+import android.support.annotation.NonNull;
+import android.util.Base64;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -19,6 +27,17 @@ public class Utils {
     private static final String DRIVER_KEY = "drivers";
     private static final String DRIVER_LOCATION_KEY = "livelocation";
 
+    public static String getBonusPointsKey() {
+        return BONUS_POINTS_KEY;
+    }
+
+    private static final String BONUS_POINTS_KEY = "bonuspoints";
+
+    public static String getDriverRouteKey() {
+        return DRIVER_ROUTE_KEY;
+    }
+
+    private static final String DRIVER_ROUTE_KEY = "currentRoute";
 
     public static String getDriverKey() {
         return DRIVER_KEY;
@@ -73,4 +92,5 @@ public class Utils {
         String stringdate = dt.format(date);
         return stringdate;
     }
+
 }

@@ -48,11 +48,11 @@ public class SubOrdersViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setData(SubOrdersModel ordersModel,Context context){
-        orderId.setText(String.format("%s%s", orderId.getText().toString(), ordersModel.getOrderId()));
-        quantity.setText(String.format("%s%s", quantity.getText().toString(), String.valueOf(ordersModel.getQuantity())));
-        deliveryLocation.setText(String.format("%s%s", deliveryLocation.getText(), ordersModel.getAddress()));
+        orderId.setText(String.format("%s%s", "OrderId: ", ordersModel.getOrderId()));
+        quantity.setText(String.format("%s%s","Quantity: ", String.valueOf(ordersModel.getQuantity())));
+        deliveryLocation.setText(String.format("%s%s", "Address: ", ordersModel.getAddress()));
         dateOfDelivery.setText(Utils.formatDate(ordersModel.getDate()));
-        name.setText(String.format("%s%s", name.getText().toString(), ordersModel.getItemName()));
+        name.setText(String.format("%s%s","ItemName: ", ordersModel.getItemName()));
 
         if (ordersModel.isDelivered()){
             returnBtn.setEnabled(true);
@@ -65,7 +65,7 @@ public class SubOrdersViewHolder extends RecyclerView.ViewHolder {
         trackBtn.setOnClickListener(v -> {
             if(ordersModel.isPublished()) {
                 Intent trackIntent = new Intent(context, TrackActivity.class);
-                trackIntent.putExtra("driverId", ordersModel.getMobile());
+                trackIntent.putExtra("driverId", ordersModel.getDriverId());
                 trackIntent.putExtra("itemName", ordersModel.getItemName());
                 trackIntent.putExtra("driverName", ordersModel.getDriverName());
                 trackIntent.putExtra("driverMobile", ordersModel.getDriverMobile());
