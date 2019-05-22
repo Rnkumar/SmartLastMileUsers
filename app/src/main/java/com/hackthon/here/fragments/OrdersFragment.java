@@ -185,8 +185,8 @@ public class OrdersFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e("input",s.charAt(s.length()-1)+"");
-                if(s.charAt(s.length()-1) == ' ' && count > 0){
+                Log.e("input",count+"");
+                if(s.length() > 0 && s.charAt(s.length()-1) == ' ' ){
                     autoCompleteService.getAutoComplete(s.toString(),getString(R.string.app_id),getString(R.string.app_code));
                 }
             }
